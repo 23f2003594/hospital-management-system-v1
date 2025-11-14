@@ -1,20 +1,9 @@
-# models.py
-# ----------------------------
-# Hospital Management System
-# Author: <Your Name>
-# Course: Modern Application Development I
-# ----------------------------
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-# Initialize the database object
 db = SQLAlchemy()
 
-
-# ----------------------------
-# Admin Model
-# ----------------------------
 class Admin(db.Model):
     __tablename__ = 'admin'
 
@@ -24,15 +13,9 @@ class Admin(db.Model):
     email = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # One admin can manage multiple doctors
-
     def __repr__(self):
         return f"<Admin {self.username}>"
 
-
-# ----------------------------
-# Department / Specialization Model
-# ----------------------------
 class Department(db.Model):
     __tablename__ = 'department'
 
@@ -48,10 +31,6 @@ class Department(db.Model):
     def __repr__(self):
         return f"<Department {self.department_name}>"
 
-
-# ----------------------------
-# Doctor Model
-# ----------------------------
 class Doctor(db.Model):
     __tablename__ = 'doctor'
 
@@ -66,17 +45,12 @@ class Doctor(db.Model):
     status = db.Column(db.String(50), default="Active")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relationships
     appointments = db.relationship('Appointment', backref='doctor', lazy=True)
     availability_slots = db.relationship('Availability', backref='doctor_info', lazy=True)
 
     def __repr__(self):
         return f"<Doctor {self.name} - {self.status}>"
 
-
-# ----------------------------
-# Patient Model
-# ----------------------------
 class Patient(db.Model):
     __tablename__ = 'patient'
 
@@ -96,10 +70,6 @@ class Patient(db.Model):
     def __repr__(self):
         return f"<Patient {self.name}>"
 
-
-# ----------------------------
-# Appointment Model
-# ----------------------------
 class Appointment(db.Model):
     __tablename__ = 'appointment'
 
@@ -119,10 +89,6 @@ class Appointment(db.Model):
     def __repr__(self):
         return f"<Appointment Doctor:{self.doctor_id}, Patient:{self.patient_id}, Date:{self.date}>"
 
-
-# ----------------------------
-# Treatment Model
-# ----------------------------
 class Treatment(db.Model):
     __tablename__ = 'treatment'
 
@@ -136,10 +102,6 @@ class Treatment(db.Model):
     def __repr__(self):
         return f"<Treatment for Appointment {self.appointment_id}>"
 
-
-# ----------------------------
-# Doctor Availability Model
-# ----------------------------
 class Availability(db.Model):
     __tablename__ = 'availability'
 
@@ -152,10 +114,6 @@ class Availability(db.Model):
     def __repr__(self):
         return f"<Availability Doctor:{self.doctor_id} {self.date} - {self.status}>"
 
-
-# ----------------------------
-# Utility Function
-# ----------------------------
 def init_admin():
     """Create a default admin if not exists."""
     from werkzeug.security import generate_password_hash
@@ -167,8 +125,3 @@ def init_admin():
         print("Default admin created: username=admin, password=admin123")
     else:
         print("Admin already exists.")
-
-
-# ----------------------------
-# END OF FILE
-# ----------------------------
